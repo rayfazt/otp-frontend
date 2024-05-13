@@ -494,7 +494,7 @@ components:
     noFilteredRoutesFound: No routes match your filter!
     openPatternViewer: View route details
     shortTitle: Routes
-    stopsInDirectionOfTravel: "Stops in this direction of travel:"
+    stopsInDirectionOfTravel: "Stops:"
     title: Route Viewer
     toggleRouteOnMap: Toggle route on map
   SaveTripButton:

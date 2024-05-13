@@ -2,8 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { connect } from 'react-redux'
-import { GeolocateControl, NavigationControl } from 'react-map-gl'
 import { injectIntl } from 'react-intl'
+import { NavigationControl } from 'react-map-gl'
 import BaseMap from '@opentripplanner/base-map'
 import generateOTP2TileLayers from '@opentripplanner/otp2-tile-overlay'
 import React, { Component } from 'react'
@@ -57,26 +57,13 @@ const MapContainer = styled.div`
     box-shadow: 0 3px 14px 4px rgb(0 0 0 / 20%);
   }
 `
-/**
- * Get the configured display names for the specified company ids.
- */
-function getCompanyNames(companyIds, config, intl) {
-  return intl.formatList(
-    (companyIds || []).map(
-      (id) =>
-        config.companies?.find((company) => company.id === id)?.label || id
-    ),
-    { type: 'conjunction' }
-  )
-}
 
 /**
  * Determines the localized name of a map layer by its type.
  */
 function getLayerName(overlay, config, intl) {
-  const { companies, name, type } = overlay
+  const { name, type } = overlay
 
-  // HACK: Support for street/satellite configs that use the name.
   switch (name) {
     case 'Streets':
       return intl.formatMessage({ id: 'components.MapLayers.streets' })
@@ -92,38 +79,9 @@ function getLayerName(overlay, config, intl) {
       return intl.formatMessage({ id: 'components.MapLayers.streets' })
     case 'satellite':
       return intl.formatMessage({ id: 'components.MapLayers.satellite' })
-    case 'bike-rental':
-    case 'otp2-bike-rental':
-    case 'rentalStations':
-      return intl.formatMessage(
-        { id: 'components.MapLayers.bike-rental' },
-        {
-          companies: getCompanyNames(companies, config, intl)
-        }
-      )
-    case 'car-rental':
-      return intl.formatMessage({ id: 'components.MapLayers.car-rental' })
-    case 'micromobility-rental':
-    case 'otp2-micromobility-rental':
-      return intl.formatMessage(
-        {
-          id: 'components.MapLayers.micromobility-rental'
-        },
-        {
-          companies: getCompanyNames(companies, config, intl)
-        }
-      )
-    case 'park-and-ride':
-      return intl.formatMessage({ id: 'components.MapLayers.park-and-ride' })
     case 'stops':
       return intl.formatMessage({ id: 'components.MapLayers.stops' })
-    case 'rentalVehicles':
-      if (overlay.network)
-        return getCompanyNames([overlay.network], config, intl)
-
-      return intl.formatMessage({ id: 'components.MapLayers.shared-vehicles' })
     case 'otp2':
-      // The otp2 type will result in multiple layers, so don't show a warning.
       return type
     default:
       console.warn(`No name found for overlay type ${type}.`)
@@ -136,8 +94,6 @@ class DefaultMap extends Component {
 
   constructor(props) {
     super(props)
-    // We have to maintain the map state because the underlying map also (incorrectly?) uses a state.
-    // Not maintaining a state causes re-renders to the map's configured coordinates.
     const {
       initLat: lat = null,
       initLon: lon = null,
@@ -152,12 +108,7 @@ class DefaultMap extends Component {
 
   /**
    * Checks whether the modes have changed between old and new queries and
-   * whether to update the map overlays accordingly (e.g., to show rental vehicle
-   * options on the map).
-   *
-   * Note: This functionality only works for the tabbed interface,
-   * as that UI mode sets the access mode and company in the query params.
-   * TODO: Implement for the batch interface.
+   * whether to update the map overlays accordingly
    */
   _handleQueryChange = (oldQuery, newQuery) => {
     const { overlays = [] } = this.props.mapConfig || {}
@@ -170,56 +121,18 @@ class DefaultMap extends Component {
       const overlayVisibility = []
       for (const oConfig of overlays) {
         if (!oConfig.modes || oConfig.modes.length !== 1) continue
-        // TODO: support multi-mode overlays
         const overlayMode = oConfig.modes[0]
-
-        if (
-          (overlayMode === 'CAR_RENT' ||
-            overlayMode === 'CAR_HAIL' ||
-            overlayMode === 'MICROMOBILITY_RENT' ||
-            overlayMode === 'SCOOTER') &&
-          oConfig.companies
-        ) {
-          // Special handling for company-based mode overlays (e.g. carshare, car-hail)
-          const overlayCompany = oConfig.companies[0] // TODO: handle multi-company overlays
-          if (added.includes(overlayMode)) {
-            // Company-based mode was just selected; enable overlay iff overlay's company is active
-            if (newQuery.companies?.includes(overlayCompany)) {
-              overlayVisibility.push({
-                overlay: oConfig,
-                visible: true
-              })
-            }
-          } else if (removed.includes(overlayMode)) {
-            // Company-based mode was just deselected; disable overlay (regardless of company)
-            overlayVisibility.push({
-              overlay: oConfig,
-              visible: false
-            })
-          } else if (
-            newModes.includes(overlayMode) &&
-            oldQuery.companies !== newQuery.companies
-          ) {
-            // Company-based mode remains selected but companies change
-            overlayVisibility.push({
-              overlay: oConfig,
-              visible: newQuery.companies.includes(overlayCompany)
-            })
-          }
-        } else {
-          // Default handling for other modes
-          if (added.includes(overlayMode)) {
-            overlayVisibility.push({
-              overlay: oConfig,
-              visible: true
-            })
-          }
-          if (removed.includes(overlayMode)) {
-            overlayVisibility.push({
-              overlay: oConfig,
-              visible: false
-            })
-          }
+        if (added.includes(overlayMode)) {
+          overlayVisibility.push({
+            overlay: oConfig,
+            visible: true
+          })
+        }
+        if (removed.includes(overlayMode)) {
+          overlayVisibility.push({
+            overlay: oConfig,
+            visible: false
+          })
         }
       }
 
@@ -235,8 +148,7 @@ class DefaultMap extends Component {
   }
 
   componentDidMount() {
-    // HACK: Set state lat and lon to null to prevent re-rendering of the
-    // underlying OTP-UI map.
+    // Set state lat and lon to null to prevent re-rendering of the map.
     this.setState({
       lat: null,
       lon: null
@@ -250,10 +162,6 @@ class DefaultMap extends Component {
 
   render() {
     const {
-      bikeRentalQuery,
-      bikeRentalStations,
-      carRentalQuery,
-      carRentalStations,
       config,
       intl,
       itinerary,
@@ -261,9 +169,7 @@ class DefaultMap extends Component {
       nearbyViewActive,
       pending,
       setLocation,
-      setViewedStop,
-      vehicleRentalQuery,
-      vehicleRentalStations
+      setViewedStop
     } = this.props
     const { getCustomMapOverlays, getTransitiveRouteLabel, ModeIcon } =
       this.context
@@ -272,19 +178,6 @@ class DefaultMap extends Component {
     const vectorTilesEndpoint = `${assembleBasePath(config)}${
       config.api?.path
     }/vectorTiles`
-
-    const bikeStations = [
-      ...bikeRentalStations.filter(
-        (station) =>
-          !station.isFloatingVehicle || station.isFloatingVehicle === false
-      ),
-      ...vehicleRentalStations.filter(
-        (station) => station.isFloatingBike === true
-      )
-    ]
-    const scooterStations = vehicleRentalStations.filter(
-      (station) => station.isFloatingBike === false && station.isFloatingVehicle
-    )
 
     const baseLayersWithNames = baseLayers?.map((baseLayer) => ({
       ...baseLayer,
@@ -303,8 +196,6 @@ class DefaultMap extends Component {
           center={[lat, lon]}
           mapLibreProps={{ reuseMaps: true }}
           maxZoom={maxZoom}
-          // In Leaflet, this was an onclick handler. Creating a click handler in
-          // MapLibreGL would require writing a custom event handler for all mouse events
           onContextMenu={this.onMapClick}
           showEverything={nearbyViewActive}
           zoom={zoom}
@@ -313,18 +204,15 @@ class DefaultMap extends Component {
           <NearbyViewDotOverlay />
           <ItinSummaryOverlay />
           <RoutePreviewOverlay />
-          {/* The default overlays */}
           <EndpointsOverlay />
           <RouteViewerOverlay />
           <TransitVehicleOverlay ModeIcon={ModeIcon} />
-          <GeolocateControl position="top-left" />
           <TransitiveOverlay
             getTransitiveRouteLabel={getTransitiveRouteLabel}
           />
           <TripViewerOverlay />
           <ElevationPointMarker />
 
-          {/* The configurable overlays */}
           {overlays?.map((overlayConfig, k) => {
             const namedLayerProps = {
               ...overlayConfig,
@@ -333,60 +221,9 @@ class DefaultMap extends Component {
               name: getLayerName(overlayConfig, config, intl)
             }
             switch (overlayConfig.type) {
-              case 'geojson':
-                return (
-                  <GeoJsonLayer {...namedLayerProps} url={overlayConfig.url} />
-                )
-              case 'bike-rental':
-                return (
-                  <VehicleRentalOverlay
-                    {...namedLayerProps}
-                    refreshVehicles={bikeRentalQuery}
-                    stations={bikeRentalStations}
-                  />
-                )
-              case 'car-rental':
-                return (
-                  <VehicleRentalOverlay
-                    {...namedLayerProps}
-                    refreshVehicles={carRentalQuery}
-                    stations={carRentalStations}
-                  />
-                )
-              case 'park-and-ride':
-                return <ParkAndRideOverlay {...namedLayerProps} />
               case 'stops':
                 return <StopsOverlay {...namedLayerProps} />
-              case 'micromobility-rental':
-                return (
-                  <VehicleRentalOverlay
-                    {...namedLayerProps}
-                    refreshVehicles={vehicleRentalQuery}
-                    stations={vehicleRentalStations}
-                  />
-                )
-              case 'otp2-micromobility-rental':
-                return (
-                  <VehicleRentalOverlay
-                    key={k}
-                    {...namedLayerProps}
-                    refreshVehicles={vehicleRentalQuery}
-                    stations={scooterStations}
-                  />
-                )
-              case 'otp2-bike-rental':
-                return (
-                  <VehicleRentalOverlay
-                    key={k}
-                    {...namedLayerProps}
-                    refreshVehicles={bikeRentalQuery}
-                    stations={bikeStations}
-                  />
-                )
               case 'otp2':
-                // This must be a method that returns an array of JSX
-                // as the base-map requires that every toggleable layer
-                // is its own component, and not a subcomponent of another component
                 return generateOTP2TileLayers(
                   overlayConfig.layers.map((l) => ({
                     ...l,
@@ -417,27 +254,21 @@ const mapStateToProps = (state) => {
   const activeSearch = getActiveSearch(state)
 
   return {
-    bikeRentalStations: state.otp.overlay.bikeRental.stations,
-    carRentalStations: state.otp.overlay.carRental.stations,
     config: state.otp.config,
     itinerary: getActiveItinerary(state),
     mapConfig: state.otp.config.map,
     nearbyViewActive:
       state.otp.ui.mainPanelContent === MainPanelContent.NEARBY_VIEW,
     pending: activeSearch ? Boolean(activeSearch.pending) : false,
-    query: state.otp.currentQuery,
-    vehicleRentalStations: state.otp.overlay.vehicleRental.stations
+    query: state.otp.currentQuery
   }
 }
 
 const mapDispatchToProps = {
-  bikeRentalQuery,
-  carRentalQuery,
   setLocation,
   setMapPopupLocationAndGeocode,
   setViewedStop,
-  updateOverlayVisibility,
-  vehicleRentalQuery
+  updateOverlayVisibility
 }
 
 export default connect(
