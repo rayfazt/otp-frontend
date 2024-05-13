@@ -20,13 +20,13 @@ map:
     - name: Streets
       url: //basemaps.cartocdn.com/gl/positron-gl-style/style.json
       attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      maxZoom: 20
-    # - name: OSM Bright
-    #   url: //tiles.stadiamaps.com/styles/osm_bright.json
-    #   attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    # - name: Stamen Toner Lite
-    #   url: //tiles.stadiamaps.com/styles/stamen_toner_lite.json
-    #   attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+      # maxZoom: 20
+    - name: OSM Bright
+      url: //tiles.stadiamaps.com/styles/osm_bright.json
+      attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    - name: Stamen Toner Lite
+      url: //tiles.stadiamaps.com/styles/stamen_toner_lite.json
+      attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   ### Optional transitive.js (route rendering) properties:
   ### - labeledModes: an array of OTP modes for which the route label should be
   ###                 rendered on the map. Example of OTP modes: BUS, RAIL, ...
@@ -229,10 +229,10 @@ routeViewer:
 #   # Remove vehicles from map that haven't sent an update in this number of seconds
   maxRealtimeVehicleAge: 60
 #   # Interval for refreshing vehicle positions
-  vehiclePositionRefreshSeconds: 30
+  vehiclePositionRefreshSeconds: 10
 
 nearbyView:
 ### Setting to hide stops with no depatures in the nearby view.
 #   hideEmptyStops: true
 ### What radius should the nearby query get results within? (in meters)
-  radius: 300
+  radius: 500

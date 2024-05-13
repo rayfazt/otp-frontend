@@ -16,7 +16,6 @@ coverage
 dist
 
 # secrets. Ignore any versions of config.yml, except for example.
-*config.yml
 !example-config.yml
 !test-config.yml
 !har-mock-config.yml

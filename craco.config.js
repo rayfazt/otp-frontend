@@ -94,7 +94,7 @@ module.exports = {
       const YAML_CONFIG =
         (process.env && process.env.YAML_CONFIG) ||
         backwardsCompatibleEnv.YAML_CONFIG ||
-        '../example-config.yml'
+        '../config.yml'
       // resolve the custom js file. If it is present, copy the file to a
       // temporary folder within this project so that the file will be able to
       // use the node_modules from this project
