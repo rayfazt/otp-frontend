@@ -1,0 +1,124 @@
+/* application menu styling */
+
+.app-menu-button {
+  border: none;
+  background: none;
+  color: #fff;
+  font-size: 24px;
+  padding: 0px 0px;
+}
+
+.otp.mobile .app-menu-button {
+  padding: 10px 0px 0px 12px;
+}
+
+.app-menu ul.dropdown-menu {
+  font-size: 20px;
+}
+
+.app-menu .btn-default:hover,
+.app-menu .btn-default:focus,
+.app-menu .btn-default:active,
+.app-menu .open > .dropdown-toggle.btn-default:focus,
+.app-menu .open > .dropdown-toggle.btn-default {
+  color: #fff;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+
+.app-menu .btn-default:hover {
+  color: #ddd;
+}
+
+/* Don't show route viewer link in the app menu on desktop as it is in the navbar */
+.app-menu .app-menu-route-viewer-link,
+.app-menu .app-menu-trip-planner-link,
+.app-menu #app-menu-locale-selector {
+  display: none;
+}
+@media (max-width: 768px) {
+  .app-menu .app-menu-route-viewer-link,
+  .app-menu .app-menu-trip-planner-link,
+  .app-menu #app-menu-locale-selector {
+    display: flex;
+  }
+}
+
+/* PrintLayout styles */
+
+.otp.print-layout {
+  max-width: 640px;
+  margin: 30px auto;
+}
+
+.otp.print-layout > .header {
+  margin-bottom: 30px;
+  border-bottom: 4px solid black;
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.otp.print-layout > .map-container {
+  border: 2px solid black;
+  height: 400px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+
+/* View Switcher Styling */
+.view-switcher {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.view-switcher a {
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  font-size: 14px;
+  padding: 6px 12px;
+  user-select: none;
+}
+.view-switcher a.active {
+  background: rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+}
+.view-switcher a:hover,
+.view-switcher a:focus {
+  border-radius: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.view-switcher a:hover {
+  color: #fff;
+}
+
+/* Full screen modal styling */
+.fullscreen-modal {
+  width: 75vw;
+  height: 60vh;
+}
+.fullscreen-modal .modal-content {
+  height: 90vh;
+}
+.fullscreen-modal iframe {
+  height: 100%;
+  width: 100%;
+}
+
+/** These changes kick in when the map is hidden. These rules ensure that the entire "sidebar"
+    (which at this point fills the entire screen) scrolls as a single unit.
+    These rules can only apply at this high zoom level because the location field dropdown is
+    otherwise "stuck" inside the sidebar and can't overlap the map. */
+@media (max-width: 768px) {
+  .main-row main {
+    overflow-y: auto;
+  }
+  .desktop-narrative-container {
+    overflow-y: unset !important;
+  }
+  .user-settings {
+    overflow-y: unset !important;
+  }
+}
