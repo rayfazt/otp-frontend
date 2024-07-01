@@ -84,16 +84,6 @@ type Props = {
   timeFormat: string
 }
 /**
- * Contains depart/arrive selector and time/date inputs for the admin-oriented
- * Call Taker form. A few unique features/behaviors to note:
- * - when "leave now" is selected the time/date will now stay up to date in the
- *   form and query params
- * - the time input will interpret various time formats so that
- *   users can quickly type a shorthand value (5p) and have that be parsed into
- *   the correct OTP format.
- * - when a user changes the date or time, "leave now" (if selected) will
- *   automatically switch to "depart at".
-
  * @type {Object}
  */
 

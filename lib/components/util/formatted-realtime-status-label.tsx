@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 /**
- * Returns a FormattedMessage component for realtime status labels such that i18n IDs
- * are hardcoded and can be kept track of by format.js CLI tools
+ * Returns a FormattedMessage component for realtime status labels
  */
 const FormattedRealtimeStatusLabel = ({
   minutes,

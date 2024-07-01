@@ -48,9 +48,6 @@ export function getCurrentPosition(
         // On error
         (error) => {
           console.log('error getting current position', error)
-          // On desktop, after user clicks "Use location" from the location fields,
-          // show an alert and explain if location is blocked.
-          // TODO: Consider moving the handling of unavailable location to the location-field component.
           if (!isMobile() && error.code === 1) {
             window.alert(
               intl.formatMessage({
@@ -60,7 +57,6 @@ export function getCurrentPosition(
           }
           const newError = { ...error }
           if (error.code === 1) {
-            // i18n for user-denied location message (error.code = 1 on secure origins).
             if (
               window.location.protocol === 'https:' ||
               window.location.host.startsWith('localhost:')
@@ -72,7 +68,6 @@ export function getCurrentPosition(
           }
           dispatch(receivedPositionError({ error: newError }))
         },
-        // Options
         { enableHighAccuracy: true }
       )
     } else {

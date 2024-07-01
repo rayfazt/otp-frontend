@@ -1,14 +1,7 @@
-# The bare minimum additional things to configure in sections below are:
-# The initLat, initLon, and  baseLayers in the 'map' section;
-# All locally relevant modes of transport in the 'modes: transitModes' section;
 homeTimezone: America/New_York
 api:
   host: http://localhost
-  # Path will be deprecated once the REST API is deprecated, which will be soon.
-  # If the OTP server is hosted at /otp, then no path needs to be configured
   path: /otp/routers/default
-  # If your OTP server is at a path other than "/otp" (usually due to a proxy)
-  # Then you can set the OPTIONAL property basePath. The default is "/otp"
   basePath: /otp
   port: 8080
   v2: true
@@ -17,43 +10,12 @@ map:
   initLat: 40.730610
   initLon: -73.935242
   baseLayers:
-    - name: Streets
-      url: //basemaps.cartocdn.com/gl/positron-gl-style/style.json
-      attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      # maxZoom: 20
     - name: OSM Bright
       url: //tiles.stadiamaps.com/styles/osm_bright.json
       attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    - name: Stamen Toner Lite
-      url: //tiles.stadiamaps.com/styles/stamen_toner_lite.json
+    - name: Streets
+      url: //basemaps.cartocdn.com/gl/positron-gl-style/style.json
       attribution: 'Map tiles: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  ### Optional transitive.js (route rendering) properties:
-  ### - labeledModes: an array of OTP modes for which the route label should be
-  ###                 rendered on the map. Example of OTP modes: BUS, RAIL, ...
-  ###                 The label is rendered under the condition that a route_short_name is provided
-  ###                 in the GTFS feed for those routes, or that a getTransitiveRouteLabel function is defined
-  ###                 in the ComponentContext (see example.js for more).
-  ### - styles.labels,
-  ###   styles.segment_labels: styles attributes recognized by transitive.js.
-  ###                         For examples of applicable style attributes, see
-  ###                         https://github.com/conveyal/transitive.js/blob/master/stories/Transitive.stories.js#L47.
-  ### - disableFlexArc: optional parameter to disable rendering flex itinerary legs as an arc.
-  # Custom Overlays
-  overlays:
-  #   The OTP2 overlay is slightly more difficult to use
-  #   - type: otp2
-  #   Each OTP2 overlay has to be configured here. The "type" must match
-  #   what's configured in router-config.json
-    # layers:
-    - type: stops
-    # - type: rentalVehicles
-  #     # Layers that include a network attribute can include a network filter field
-  #     # The layer name and ID will be automatically generated. The name can be set
-  #     # using i18n keys.
-  #     network: lime_seattle
-    # - type: rentalVehicles
-  #     network: Link_Seattle
-    # - type: rentalStations
   transitive:
     labeledModes:
       - BUS
@@ -70,169 +32,65 @@ map:
         font-size: 18px
     disableFlexArc: true
 
-# Use this mode config for the enhanced Transit+ config
 modes:
-  # Definition for the mode buttons to display in trip form
   modeButtons:
     - iconName: bus
       key: transit
-      # List of modes to add to the query when this button is enabled
       modes:
         - mode: TRANSIT
-  # Allows initial state to be configured.
-  # Which buttons enabled on load + overriding setting defaults
   initialState:
-    enabledModeButtons: # Mode button keys enabled by default
+    enabledModeButtons: 
       - transit
-      # - bike
-  # Add additional mode settings to show up in mode selector hover panel
-  modeSettingDefinitions:
-    # Corresponding mode; if this mode is found in the button's mode list,
-    # this setting will show up in the hover panel for that button.
-    # - applicableMode: TRANSIT
-    #   default: false # Initial state value
-    #   # One of the predefined query parameter names.
-    #   # See OTP-UI ModeSelector component for a list of supported parameter names.
-    #   key: wheelchair
-    #   iconName: wheelchair
-    #   type: CHECKBOX # Possible options: CHECKBOX, SUBMODE, SLIDER, DROPDOWN
   transitModes:
     - mode: BUS
       label: Bus
-      # A mode color can be added, used throughout the application,
-      # most notably in the enhanced stop viewer bubble
       color: blue
 
 routingTypes:
   - key: ITINERARY
     text: Exact Time
 
-# Itinerary options
 itinerary:
-  # Show fares for each transit leg (false if omitted).
-  # (Requires using LineItinerary.)
   showRouteFares: false
-  # Whether the plan first/previous/next/last buttons should be shown along with
-  # plan trip itineraries.
   showPlanFirstLastButtons: false
-  # Filters out trips returned by OTP by default, unless specifically requested.
-  # e.g. filters out walk-only itineraries if user has not explicitly asked for them.
-  strictItineraryFiltering: false
-  # Whether to render route names and colors in the blocks inside
-  # the batch ui rows
+  strictItineraryFiltering: true
   renderRouteNamesInBlocks: true
-  # Whether the mode icons should be colored as well
   fillModeIcons: true
-  # Allow user to collapse alerts in itinerary body
   allowUserAlertCollapsing: true
-  # If multiple fares are returned by OTP, assign names to the fare keys here
   defaultFareType: { mediumId: null, riderCategoryId: null }
 
-  # The following settings must be set to these values to use the new
-  # "Metro" UI. The settings can be used without the Metro UI, but
-  # this may have unexpected effects.
-
-  # When using the metro UI, it is recommended to have 8+ itineraries returned by OTP
-
-  # Whether to show the "# itineraries found" text above the itinerary results
   showHeaderText: false
-  # Whether to show the mode descriptions in the batch UI results. Defaults to true
   showBatchUiItineraryHeaders: false
-  # Whether to hide the gray loading bars that appear while results are loading
   hideSkeletons: true
-  # Whether the itinerary listing background should match the header
   customBatchUiBackground: true
-  # Whether to render itineraries below a mode description header
   groupByMode: true
-  # Whether to merge groups of itineraries with the same primary mode (Bike, Walk, etc)
   groupTransitModes: true
-  # Whether to merge itineraries with the same origin, destination, and transit modes
   mergeItineraries: true
-  # Whether to show the first itinerary on the map. If this is set to false, routes
-  # will only show on the map on hover or click
   showFirstResultByDefault: false
-  # This flag disables the dot between legs in the metro itnerary summary, replacing it with
-  # a gray background
   disableMetroSeperatorDot: false
-  # If enabled, always shows departures as times ("10pm" instead of "3 min") unless realtime data is present
   onlyShowCountdownForRealtime: true
-  # Show the number of minutes of delay or early beneath a time in the itinerary body
   showScheduleDeviation: true
-  # Shows the duration of a leg below the leg in the metro itinerary summary
   showLegDurations: false
-  # Whether to show (experimental) itinerary preview overlay on itinerary results on map
   previewOverlay: true
-  # Whether to add a OTP_RR_A11Y_ROUTING_ENABLED error to all itineraries with accessibility scores
   displayA11yError: false
-  # The sort option to use by default
-  # Available sort options: 'BEST', 'DURATION', 'ARRIVALTIME', 'WALKTIME', 'DEPARTURETIME'
-  defaultSort: "BEST" # Default
-  # The sort options to display in the sort options list
-  # If unset, will display all.
-  # Available sort options: 'BEST', 'DURATION', 'ARRIVALTIME', 'WALKTIME', 'DEPARTURETIME'
+  defaultSort: "BEST"
   sortModes: 
     - 'BEST'
     - 'DURATION'
     - 'ARRIVALTIME'
-    - 'WALKTIME'
     - 'DEPARTURETIME'
+    - 'WALKTIME'
 
-### Use this config for the standard mode selector
 modeGroups:
   - name: Transit
     modes:
       - BUS
 
-### Popup config
-### OTP-RR supports a full-screen modal popup that can be launched from a set of
-### pre-set locations. Each button can be configured to open a different popup.
-### Popup "targets" define a URL that is opened. Their ID is used to give them names
-### via the language section below. For example, a target with the id "testTarget"
-### can be named with the i18n string "config.popups.testTarget" (see the language section below for an example)
-###
-### Each popup button location can have a target assigned to it
-# popups:
-#   targets:
-#     testTarget: # To set a name for this target, create the i18n string "config.popups.testTarget"
-#       url: http://example.com/ 
-#       modal: false # Setting this to false always launches the popup as a browser popup
-#     secondTarget: 
-#       url: http://test.com/
-#       appendLocale: false # Defaults to true, if set to false otp-rr will not append the current i18n language to the popup URL.
-#   launchers:
-#     toolbar: testTarget # This button is rendered in the top right of the toolbar (desktop view only!)
-#     itineraryFooter: testTarget # This button is rendered at the bottom of a selected itinerary
-#     optionFilter: secondTarget # This button is rendered to the left of the itinerary filter in the batch and metro UIs
-#     sidebarLink: testTarget # this button is rendered in the sidebar
-
-### Localization section to provide language/locale settings
-#localization:
-#  defaultLocale: 'en-US'
-
-# set this value to change the absolute number of seconds of deviation from the
-# schedule for a transit stop time to be considered early, on-time or late. The
-# default is 60 seconds.
 onTimeThresholdSeconds: 60
 
-# stopViewer:
-#   # Whether to display block IDs with each departure in the schedule mode.
-#   # (defaults to false if unspecified).
-  # showBlockIds: true
 routeViewer:
-#   # Whether to render routes within flex zones of a route's patterns. If set to true,
-#   # routes will not be rendered within flex zones.
-#   hideRouteShapesWithinFlexZones: true
-#   # Disable vehicle highlight if necessary (e.g. custom or inverted icons)
-#   vehicleIconHighlight: true
-#   # Customize vehicle icon padding (the default iconPadding is 2px in otp-ui)
-#   vehicleIconPadding: 0
-#   # Remove vehicles from map that haven't sent an update in this number of seconds
   maxRealtimeVehicleAge: 60
-#   # Interval for refreshing vehicle positions
   vehiclePositionRefreshSeconds: 10
 
 nearbyView:
-### Setting to hide stops with no depatures in the nearby view.
-#   hideEmptyStops: true
-### What radius should the nearby query get results within? (in meters)
-  radius: 500
+  radius: 1000

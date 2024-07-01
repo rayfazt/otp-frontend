@@ -82,10 +82,7 @@ Object {
     "transitive": null,
     "vehicleRental": Object {
       "stations": Array [],
-    },
-    "zipcar": Object {
-      "locations": Array [],
-    },
+    }
   },
   "searches": Object {},
   "tnc": Object {

@@ -337,8 +337,6 @@ const DEFAULT_COSTS = {
 
 /**
  * Returns total fare for itinerary (in cents)
- * FIXME: Move to otp-ui?
- * TODO: Add GBFS fares
  */
 export function getTotalFare(
   itinerary: Itinerary,

@@ -1,6 +1,6 @@
 .otp .navbar {
   border-radius: 0;
-  background-color: #444;
+  background-color: #0d86cc;
   margin: 0px;
 }
 
@@ -31,7 +31,6 @@
   padding: 0px 15px;
 }
 
-/* Necessary for defining the height in the main panel nested elements. */
 .main-row main {
   height: 100%;
 }

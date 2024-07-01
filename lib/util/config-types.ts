@@ -74,7 +74,6 @@ export type NearbyViewConfig = {
   useRouteViewSort?: boolean
 }
 
-/** TODO: Language settings */
 export type LanguageConfig = Record<string, any>
 
 export interface LocalizationConfig {
@@ -156,11 +155,11 @@ export interface BaseLayerConfig {
 /** Map views (e.g. default, stylized) */
 export interface MapViewConfig {
   text: string
-  type: string // TODO use a list of values.
+  type: string
 }
 
 export interface OverlayConfigBase {
-  modes?: string[] // TODO use allowed OTP mode list.
+  modes?: string[]
   name?: string
   visible?: boolean
 }

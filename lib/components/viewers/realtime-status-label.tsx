@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// Typescript TODO: Waiting on viewer.js being typed
 import { connect } from 'react-redux'
 import { FormattedMessage, FormattedTime } from 'react-intl'
 import { InvisibleAdditionalDetails } from '@opentripplanner/itinerary-body/lib/styled'

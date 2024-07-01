@@ -28,8 +28,6 @@ const NavLoginButtonAuth0 = ({
 }: NavLoginButtonAuth0Props): JSX.Element => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0()
 
-  // For Chinese (Chinese (Simplified)), we must pass 'zh-CN' to auth0.
-  // Unlike 'fr', 'zh' alone is not recognized and falls back to English.
   const auth0Locale = locale === 'zh' ? 'zh-CN' : locale
 
   // On login, preserve the current trip query if any.

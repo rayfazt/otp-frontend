@@ -9,9 +9,6 @@ describe('util > i18n', () => {
         expected: {
           'en-US': {
             name: 'English (US)'
-          },
-          fr: {
-            name: 'French'
           }
         },
         input: {
@@ -20,9 +17,6 @@ describe('util > i18n', () => {
           },
           'en-US': {
             name: 'English (US)'
-          },
-          fr: {
-            name: 'French'
           }
         }
       },
@@ -34,9 +28,6 @@ describe('util > i18n', () => {
           },
           'en-US': {
             name: 'English (US)'
-          },
-          fr: {
-            label: 'French'
           }
         }
       },

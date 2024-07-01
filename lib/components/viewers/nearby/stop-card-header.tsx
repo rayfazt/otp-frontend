@@ -13,7 +13,6 @@ import OperatorLogo from '../../util/operator-logo'
 import Strong from '../../util/strong-text'
 
 import { CardBody, CardHeader, CardTitle } from './styled'
-import DistanceDisplay from './distance-display'
 
 type Props = {
   actionIcon: ComponentType
@@ -100,7 +99,6 @@ const StopCardHeader = ({
             ))}
           <span>{stopData.name}</span>
         </CardTitle>
-        <DistanceDisplay distance={stopData.distance} />
       </CardHeader>
       <CardBody>
         <div>

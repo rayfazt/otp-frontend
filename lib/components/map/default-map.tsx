@@ -59,7 +59,7 @@ const MapContainer = styled.div`
 `
 
 /**
- * Determines the localized name of a map layer by its type.
+ * Determines the name of a map layer by its type.
  */
 function getLayerName(overlay, config, intl) {
   const { name, type } = overlay
@@ -73,7 +73,7 @@ function getLayerName(overlay, config, intl) {
       if (name) return name
   }
 
-  // If overlay.name is not specified, use the type to determine the name.
+  // If overlay.name is not specified, use the type to determine the name
   switch (type) {
     case 'streets':
       return intl.formatMessage({ id: 'components.MapLayers.streets' })
@@ -81,8 +81,6 @@ function getLayerName(overlay, config, intl) {
       return intl.formatMessage({ id: 'components.MapLayers.satellite' })
     case 'stops':
       return intl.formatMessage({ id: 'components.MapLayers.stops' })
-    case 'otp2':
-      return type
     default:
       console.warn(`No name found for overlay type ${type}.`)
       return type
@@ -161,23 +159,12 @@ class DefaultMap extends Component {
   }
 
   render() {
-    const {
-      config,
-      intl,
-      itinerary,
-      mapConfig,
-      nearbyViewActive,
-      pending,
-      setLocation,
-      setViewedStop
-    } = this.props
+    const { config, intl, itinerary, mapConfig, nearbyViewActive, pending } =
+      this.props
     const { getCustomMapOverlays, getTransitiveRouteLabel, ModeIcon } =
       this.context
     const { baseLayers, maxZoom, overlays } = mapConfig || {}
     const { lat, lon, zoom } = this.state
-    const vectorTilesEndpoint = `${assembleBasePath(config)}${
-      config.api?.path
-    }/vectorTiles`
 
     const baseLayersWithNames = baseLayers?.map((baseLayer) => ({
       ...baseLayer,
@@ -223,17 +210,6 @@ class DefaultMap extends Component {
             switch (overlayConfig.type) {
               case 'stops':
                 return <StopsOverlay {...namedLayerProps} />
-              case 'otp2':
-                return generateOTP2TileLayers(
-                  overlayConfig.layers.map((l) => ({
-                    ...l,
-                    name: getLayerName(l, config, intl) || l.network || l.type
-                  })),
-                  vectorTilesEndpoint,
-                  setLocation,
-                  setViewedStop,
-                  config.companies
-                )
               default:
                 return null
             }
@@ -248,8 +224,7 @@ class DefaultMap extends Component {
   }
 }
 
-// connect to the redux store
-
+// connect to redux store
 const mapStateToProps = (state) => {
   const activeSearch = getActiveSearch(state)
 
