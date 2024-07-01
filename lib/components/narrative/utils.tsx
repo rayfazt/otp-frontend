@@ -5,9 +5,6 @@ import { StyledIconWrapper } from '../util/styledIcon'
 
 /**
  * Takes a gradation map and overrides the text with intl strings when available.
- * Also replaces icon string with actual icon components.
- * TODO: This function should be implemented where the icons are displayed,
- * rather than messily rewriting the gradation mapping object. Future accessilibty refactor?
  * @param intl React-Intl object
  * @param SvgIcon SvgIcon from context
  * @param gradationMap Gradation mapping from config

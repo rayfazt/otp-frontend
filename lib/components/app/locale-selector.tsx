@@ -9,7 +9,6 @@ import { getLanguageOptions } from '../../util/i18n'
 import { UnstyledButton } from '../util/unstyled-button'
 
 interface LocaleSelectorProps {
-  // Typescript TODO languageOptions based on configLanguage type.
   languageOptions: Record<string, any> | null
   locale: string
   setLocale: (locale: string) => void
@@ -45,7 +44,6 @@ const LocaleSelector = (props: LocaleSelectorProps): JSX.Element | null => {
   ) : null
 }
 
-// Typescript TODO: type state properly
 const mapStateToProps = (state: any) => {
   return {
     languageOptions: getLanguageOptions(state.otp.config.language),

@@ -17,12 +17,6 @@ type Props = {
 const mapStateToProps = (state: Record<string, any>, ownProps: Props) => {
   const { labeledModes, styles } = state.otp.config.map.transitive || {}
   const { viewedRoute } = state.otp.ui
-
-  // If the route viewer is active, do not show itinerary on map.
-  // mainPanelContent is null whenever the trip planner is active.
-  // Some views like the stop viewer can be accessed via the trip planner
-  // or the route viewer, so include a route being viewed as a condition
-  // for hiding
   if (state.otp.ui.mainPanelContent !== null && viewedRoute) {
     return {}
   }
@@ -31,10 +25,10 @@ const mapStateToProps = (state: Record<string, any>, ownProps: Props) => {
     activeLeg: getActiveLeg(state),
     labeledModes,
     styles,
-    // @ts-expect-error typescript is confused by the complex redux reducer. Both params are needed
+    // @ts-expect-error typescript
     transitiveData: getTransitiveData(state, ownProps)
   }
 }
 
-// @ts-expect-error state.js being typescripted will fix this error
+// @ts-expect-error state.js
 export default injectIntl(connect(mapStateToProps)(TransitiveCanvasOverlay))

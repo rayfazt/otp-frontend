@@ -44,7 +44,6 @@ const Stop = ({
       if (dupe === -1) {
         acc.push(cur)
       } else {
-        // TODO: is there a method that already does this?
         const filteredNewStopTimes = cur.stoptimes.filter(
           (stoptime: StopTime) =>
             !acc[dupe].stoptimes.find(

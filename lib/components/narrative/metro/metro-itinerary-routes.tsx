@@ -59,7 +59,6 @@ const InvisibleHeader = styled(InvisibleA11yLabel)`
 `
 
 type Props = {
-  // TODO: create and reuse type for LegIcon.
   LegIcon: ({ height, leg }: { height: number; leg: Leg }) => React.ReactElement
   enableDot?: boolean
   /** This is true when there is only one itinerary being shown and the itinerary-body is visible */
@@ -129,7 +128,6 @@ const MetroItineraryRoutes = ({
   )
 }
 
-// TODO: state type
 const mapStateToProps = (state: any) => ({
   enableDot: !state.otp.config.itinerary?.disableMetroSeperatorDot
 })

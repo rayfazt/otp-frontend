@@ -38,7 +38,6 @@ import DateTimeButton from './date-time-button'
 
 const queryParamConfig = { modeButtons: DelimitedArrayParam }
 
-// TYPESCRIPT TODO: better types
 type Props = {
   activeSearch: any
   currentQuery: any
@@ -159,7 +158,6 @@ function BatchSettings({
     }
     onPlanTripClick && onPlanTripClick()
     if (issues.length > 0) {
-      // TODO: replace with less obtrusive validation.
       window.alert(
         intl.formatMessage(
           { id: 'components.BatchSettings.validationMessage' },
@@ -279,7 +277,6 @@ function BatchSettings({
 }
 
 // connect to the redux store
-// TODO: Typescript
 const mapStateToProps = (state: any) => {
   const urlSearchParams = new URLSearchParams(state.router.location.search)
   const modeSettingValues = generateModeSettingValues(
@@ -290,7 +287,6 @@ const mapStateToProps = (state: any) => {
   return {
     activeSearch: getActiveSearch(state),
     currentQuery: state.otp.currentQuery,
-    // TODO: Duplicated in apiv2.js
     enabledModeButtons:
       decodeQueryParams(queryParamConfig, {
         modeButtons: urlSearchParams.get('modeButtons')

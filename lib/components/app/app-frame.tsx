@@ -14,7 +14,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
  */
 const AppFrame = ({ children, SubNav }: Props): JSX.Element => (
   <div className="otp" id="otp">
-    {/* TODO: Do mobile view. */}
     <DesktopNav />
     {SubNav && <SubNav />}
     {/* Create a main region here so that the DesktopNav, which contains a "banner" landmark,

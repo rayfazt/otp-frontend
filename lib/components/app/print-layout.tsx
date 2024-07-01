@@ -25,16 +25,13 @@ import SpanWithSpace from '../util/span-with-space'
 import TripDetails from '../narrative/connected-trip-details'
 
 type Props = {
-  // TODO: Typescript activeSearch type
   activeSearch: any
-  // TODO: Typescript config type
   config: any
   currentQuery: any
   intl: IntlShape
   itinerary: Itinerary
   location?: { search?: string }
   parseUrlQueryString: (params?: any, source?: string) => any
-  // TODO: Typescript user type
   user: any
 }
 
@@ -74,8 +71,6 @@ class PrintLayout extends Component<Props, State> {
     if (!itinerary && location && location.search) {
       parseUrlQueryString()
     }
-
-    // TODO: use currentQuery to pan/zoom to the correct part of the map
   }
 
   componentWillUnmount() {
@@ -149,8 +144,6 @@ class PrintLayout extends Component<Props, State> {
 }
 
 // connect to the redux store
-
-// TODO: Typescript state
 const mapStateToProps = (state: any) => {
   const activeSearch = getActiveSearch(state)
   const { localUser, loggedInUser } = state.user

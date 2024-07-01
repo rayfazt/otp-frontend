@@ -155,7 +155,6 @@ const ItinerarySummaryOverlay = ({
         {midPoints.map(
           (mp) =>
             // If no itinerary is hovered, show all of them. If one is selected, show only that one
-            // TODO: clean up conditionals, move these to a more appropriate place without breaking indexing
             (visibleItinerary !== null && visibleItinerary !== undefined
               ? visibleItinerary === mp.itin.index
               : true) &&
@@ -170,7 +169,6 @@ const ItinerarySummaryOverlay = ({
                   onClick={() => {
                     setActive({ index: mp.itin.index })
                   }}
-                  // TODO: useCallback here (getting weird errors?)
                   onMouseEnter={() => {
                     setSharedTimeout(
                       setTimeout(() => {

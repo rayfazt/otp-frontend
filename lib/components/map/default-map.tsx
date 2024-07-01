@@ -5,16 +5,9 @@ import { connect } from 'react-redux'
 import { injectIntl } from 'react-intl'
 import { NavigationControl } from 'react-map-gl'
 import BaseMap from '@opentripplanner/base-map'
-import generateOTP2TileLayers from '@opentripplanner/otp2-tile-overlay'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import {
-  assembleBasePath,
-  bikeRentalQuery,
-  carRentalQuery,
-  vehicleRentalQuery
-} from '../../actions/api'
 import { ComponentContext } from '../../util/contexts'
 import { getActiveItinerary, getActiveSearch } from '../../util/state'
 import { MainPanelContent } from '../../actions/ui-constants'
@@ -22,12 +15,9 @@ import { setLocation, setMapPopupLocationAndGeocode } from '../../actions/map'
 import { setViewedStop } from '../../actions/ui'
 import { updateOverlayVisibility } from '../../actions/config'
 
-import ElevationPointMarker from './elevation-point-marker'
 import EndpointsOverlay from './connected-endpoints-overlay'
-import GeoJsonLayer from './connected-geojson-layer'
 import ItinSummaryOverlay from './itinerary-summary-overlay'
 import NearbyViewDotOverlay from './nearby-view-dot-overlay'
-import ParkAndRideOverlay from './connected-park-and-ride-overlay'
 import PointPopup from './point-popup'
 import RoutePreviewOverlay from './route-preview-overlay'
 import RouteViewerOverlay from './connected-route-viewer-overlay'
@@ -35,7 +25,6 @@ import StopsOverlay from './connected-stops-overlay'
 import TransitiveOverlay from './connected-transitive-overlay'
 import TransitVehicleOverlay from './connected-transit-vehicle-overlay'
 import TripViewerOverlay from './connected-trip-viewer-overlay'
-import VehicleRentalOverlay from './connected-vehicle-rental-overlay'
 import withMap from './with-map'
 
 const MapContainer = styled.div`
@@ -58,9 +47,6 @@ const MapContainer = styled.div`
   }
 `
 
-/**
- * Determines the name of a map layer by its type.
- */
 function getLayerName(overlay, config, intl) {
   const { name, type } = overlay
 
@@ -73,7 +59,6 @@ function getLayerName(overlay, config, intl) {
       if (name) return name
   }
 
-  // If overlay.name is not specified, use the type to determine the name
   switch (type) {
     case 'streets':
       return intl.formatMessage({ id: 'components.MapLayers.streets' })
@@ -105,13 +90,11 @@ class DefaultMap extends Component {
   }
 
   /**
-   * Checks whether the modes have changed between old and new queries and
-   * whether to update the map overlays accordingly
+   * check if modes have changed between old and new queries and update the map overlays accordingly
    */
   _handleQueryChange = (oldQuery, newQuery) => {
     const { overlays = [] } = this.props.mapConfig || {}
     if (oldQuery.mode) {
-      // Determine any added/removed modes
       const oldModes = oldQuery.mode.split(',')
       const newModes = newQuery.mode.split(',')
       const removed = oldModes.filter((m) => !newModes.includes(m))
@@ -134,7 +117,6 @@ class DefaultMap extends Component {
         }
       }
 
-      // Only trigger update action if there are overlays to update.
       if (overlayVisibility.length > 0) {
         this.props.updateOverlayVisibility(overlayVisibility)
       }
@@ -146,7 +128,6 @@ class DefaultMap extends Component {
   }
 
   componentDidMount() {
-    // Set state lat and lon to null to prevent re-rendering of the map.
     this.setState({
       lat: null,
       lon: null
@@ -154,7 +135,6 @@ class DefaultMap extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Check if any overlays should be toggled due to mode change
     this._handleQueryChange(prevProps.query, this.props.query)
   }
 
@@ -198,7 +178,6 @@ class DefaultMap extends Component {
             getTransitiveRouteLabel={getTransitiveRouteLabel}
           />
           <TripViewerOverlay />
-          <ElevationPointMarker />
 
           {overlays?.map((overlayConfig, k) => {
             const namedLayerProps = {
@@ -214,7 +193,6 @@ class DefaultMap extends Component {
                 return null
             }
           })}
-          {/* If set, custom overlays are shown if no active itinerary is shown or pending. */}
           {typeof getCustomMapOverlays === 'function' &&
             getCustomMapOverlays(!itinerary && !pending)}
           <NavigationControl position="bottom-right" />

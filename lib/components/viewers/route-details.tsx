@@ -170,7 +170,6 @@ class RouteDetails extends Component<Props> {
           <LogoLinkContainer>
             {agency && (
               <>
-                {/** TODO: use <OperatorLogo /> here? */}
                 <FormattedMessage
                   id="components.RouteDetails.operatedBy"
                   values={{

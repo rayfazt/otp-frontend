@@ -28,7 +28,6 @@ import VehicleParking from './vehicle-parking'
 
 const AUTO_REFRESH_INTERVAL = 15000
 
-// TODO: use lonlat package
 type LatLonObj = { lat: number; lon: number }
 
 type Props = {

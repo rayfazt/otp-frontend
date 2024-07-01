@@ -201,9 +201,6 @@ class PhoneNumberEditor extends Component<Props, State> {
       formatPhoneNumber(initialPhoneNumber)
     )
 
-    // Note: ARIA alerts are read out only once, until they change,
-    // so there is no need to clear them.
-    // TODO: Find a correct way to render phone numbers for screen readers (at least for US).
     let ariaAlertContent
     if (phoneNumberReceived) {
       ariaAlertContent = (

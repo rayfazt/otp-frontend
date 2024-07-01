@@ -12,9 +12,7 @@ interface Props extends StackedPanesProps {
 }
 
 /**
- * This component handles the flow between screens for new OTP user accounts.
- *
- * TODO: add types once Pane type exists
+ * This component handles the flow between screens for new OTP user accounts
  */
 const StackedPanesWithSave = ({
   extraButton,

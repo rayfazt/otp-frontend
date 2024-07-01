@@ -39,7 +39,7 @@ const NavItemOnLargeScreens = styled(NavbarItem)`
   }
 `
 
-// Typscript TODO: otpConfig type
+// Typscript otpConfig type
 export type Props = {
   locale: string
   otpConfig: AppConfig
@@ -57,8 +57,6 @@ export type Props = {
  *    (The title is still rendered for screen readers and browsers that lack image support.)
  * 2. If `branding` is not defined but if `title` is, then `title` is shown.
  * 3. If neither is defined, just show 'OpenTripPlanner' (DEFAULT_APP_TITLE).
- *
- * TODO: merge with the mobile navigation bar.
  */
 const DesktopNav = ({
   locale,

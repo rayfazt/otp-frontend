@@ -45,12 +45,10 @@ export const getFlexAttributes = (
 
 export const removeInsignifigantWalkLegs = (leg: Leg): boolean =>
   // Return true only for non walk-legs or walking legs over 400 meters
-  // TODO: Make the 400 meters configurable?
   leg.mode !== 'WALK' || leg.distance > 400
 
 /**
  * Generate text for all routes used in an itinerary.
- * TODO: include all alternate routes inside alternateRoutes as well!
  */
 export const getItineraryRoutes = (
   itinerary: Itinerary,

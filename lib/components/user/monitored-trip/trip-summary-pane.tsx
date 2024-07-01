@@ -63,7 +63,6 @@ const TextWIcon = styled.div`
   display: flex;
   gap: 7px;
   justify-content: left;
-  // TODO: Do this in grid
   width: 250px;
 
   svg {
@@ -74,7 +73,6 @@ const TextWIcon = styled.div`
 const TripDetailWithIcon = styled(TextWIcon)`
   align-items: center;
   gap: 12px;
-  // TODO: Do this in grid
   width: 273px;
 
   svg {

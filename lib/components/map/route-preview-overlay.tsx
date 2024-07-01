@@ -74,7 +74,6 @@ const RoutePreviewOverlay = ({ from, geometries, to, visible }: Props) => {
   }
 }
 
-// TODO: Typescript state
 const mapStateToProps = (state: any) => {
   const { activeSearchId, config } = state.otp
   // Only show this overlay if the metro UI is explicitly enabled

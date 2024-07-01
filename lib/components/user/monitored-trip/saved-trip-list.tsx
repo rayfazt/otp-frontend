@@ -132,7 +132,6 @@ class TripListItem extends Component<ItemProps, ItemState> {
             </Link>
           </TripPanelTitle>
           <RouteBlockGrid>
-            {/* TODO: Fix issues with custom route renderer */}
             <MetroItineraryRoutes
               expanded={false}
               itinerary={itinerary}

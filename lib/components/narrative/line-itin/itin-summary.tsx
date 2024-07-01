@@ -10,7 +10,6 @@ import { ComponentContext } from '../../../util/contexts'
 import { getFare } from '../../../util/itinerary'
 import FormattedDuration from '../../util/formatted-duration'
 
-// TODO: make this a prop
 const defaultRouteColor = '#008'
 
 const Container = styled.div`

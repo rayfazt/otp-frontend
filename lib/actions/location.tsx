@@ -1,4 +1,4 @@
-// @ts-expect-error TODO: add @types/redux-actions (will break other other stuff).
+// @ts-expect-error add @types/redux-actions (will break other other stuff).
 import { createAction } from 'redux-actions'
 import { Dispatch } from 'redux'
 import { IntlShape } from 'react-intl'

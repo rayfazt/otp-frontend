@@ -316,18 +316,11 @@ class MetroItinerary extends NarrativeItinerary {
         <div
           className="header"
           onClick={expanded ? undefined : handleClick}
-          // TODO: once this can be tabbed to, this behavior needs to be improved. Maybe it focuses the
-          // first time?
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           onKeyDown={() => {}}
           onMouseEnter={expanded ? undefined : this._onMouseEnter}
           onMouseLeave={expanded ? undefined : this._onMouseLeave}
-          // TODO: use _onHeaderClick for tap only -- this will require disabling
-          // this onClick handler after a touchStart
-          // TODO: CORRECT THIS ARIA ROLE
           role="presentation"
-          // TODO test this with a screen reader
-          // tabIndex={expanded ? 1 : 0}
         >
           <ItineraryWrapper className={`itin-wrapper${mini ? '-small' : ''}`}>
             {emissionsNote && <ItineraryNote>{emissionsNote}</ItineraryNote>}
@@ -339,7 +332,6 @@ class MetroItinerary extends NarrativeItinerary {
             )}
             {!mini && (
               <ItineraryGrid className="itin-grid" role="group">
-                {/* TODO: a11y: add aria-label to parent element */}
                 <MetroItineraryRoutes
                   expanded={expanded}
                   itinerary={itinerary}
@@ -376,11 +368,9 @@ class MetroItinerary extends NarrativeItinerary {
                       transitFare < 0 ? (
                         <FormattedMessage id="common.itineraryDescriptions.fareUnknown" />
                       ) : (
-                        // TODO: re-implement TNC fares for metro UI?
                         <FormattedNumber
                           currency={fareCurrency}
                           currencyDisplay="narrowSymbol"
-                          // This isn't a "real" style prop
                           // eslint-disable-next-line react/style-prop-object
                           style="currency"
                           value={transitFare}
@@ -467,7 +457,6 @@ const mapStateToProps = (state: AppReduxState, ownProps: Props) => {
   }
 }
 
-// TS TODO: correct redux types
 const mapDispatchToProps = {
   setItineraryView: uiActions.setItineraryView
 }

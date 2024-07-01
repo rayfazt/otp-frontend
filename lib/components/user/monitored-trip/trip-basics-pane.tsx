@@ -248,8 +248,6 @@ class TripBasicsPane extends Component<TripBasicsProps, State> {
       )
       return (
         <div>
-          {/* TODO: This component does not block navigation on reload or using the back button.
-          This will have to be done at a higher level. See #376 */}
           <Prompt message={unsavedChangesMessage} when={unsavedChanges} />
 
           {/* Do not show trip status when saving trip for the first time
@@ -326,8 +324,7 @@ class TripBasicsPane extends Component<TripBasicsProps, State> {
                         title={notAvailableText}
                       >
                         <Field
-                          // Let users save an existing trip, even though it may not be available on some days.
-                          // TODO: improve checking trip availability.
+                          // Let users save an existing trip, even though it may not be available on some days
                           disabled={isDayDisabled && isCreating}
                           id={day}
                           name={day}

@@ -15,7 +15,6 @@ export const boxShadowCss = css`
   box-shadow: rgba(0, 0, 0, 0.15) 0 0 20px;
 `
 
-// TODO: this needs to be in line with the mode selector buttons, ideally importing the styles
 export const buttonCss = css`
   border-radius: 5px;
   border: 0px;

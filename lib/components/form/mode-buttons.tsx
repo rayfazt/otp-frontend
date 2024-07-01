@@ -9,8 +9,6 @@ import { ComponentContext } from '../../util/contexts'
 import { getFormattedMode } from '../../util/i18n'
 import { StyledIconWrapper } from '../util/styledIcon'
 
-// TS TODO: merge this type with FullModeOption from
-// @opentripplanner/trip-form/types.ts and move to @opentripplanner/types.
 export type Mode = {
   defaultUnselected?: boolean
   icon?: string
@@ -129,7 +127,7 @@ export const defaultModeOptions: Mode[] = [
   },
   {
     icon: 'mobile',
-    mode: 'RENT' // TODO: include HAIL?
+    mode: 'RENT'
   }
 ]
 

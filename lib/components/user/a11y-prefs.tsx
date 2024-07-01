@@ -4,7 +4,6 @@ import React from 'react'
 
 /**
  * Renders the accessibility preferences for the account settings page.
- * TODO: add more detailed preferences here? (maximum slope, mandated curb cuts etc)
  */
 const A11yPrefs = ({
   handleBlur, // Formik prop

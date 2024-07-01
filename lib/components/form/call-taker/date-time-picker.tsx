@@ -147,9 +147,7 @@ const DateTimeOptions = ({
       setTypedTime(
         safeFormat(dateTime, timeFormat, {
           timeZone: homeTimezone
-        }) ||
-          // TODO: there doesn't seem to be an intl object present?
-          'Invalid Time'
+        }) || 'Invalid Time'
       )
     }
   }, [time])
@@ -215,9 +213,7 @@ const DateTimeOptions = ({
           <Tooltip id="time-tooltip">
             {safeFormat(dateTime, timeFormat, {
               timeZone: homeTimezone
-            }) ||
-              // TODO: there doesn't seem to be an intl object present?
-              'Invalid Time'}
+            }) || 'Invalid Time'}
           </Tooltip>
         }
         placement="bottom"
@@ -249,7 +245,6 @@ const DateTimeOptions = ({
         onChange={(e) => {
           if (!e.target.value) {
             e.preventDefault()
-            // TODO: prevent selection from advancing to next field
             return
           }
           setDate(e.target.value)
