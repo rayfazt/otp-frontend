@@ -10,7 +10,6 @@ import { getTripStatus, REALTIME_STATUS } from '../../util/viewer'
 import FormattedDuration from '../util/formatted-duration'
 import FormattedRealtimeStatusLabel from '../util/formatted-realtime-status-label'
 
-// If shown, keep the '5 min' portion of the status string on the same line.
 export const DelayText = styled.span`
   white-space: nowrap;
 `
@@ -52,14 +51,6 @@ const STATUS = {
   }
 }
 
-/**
- * This component renders a string such as '5 min late' or 'on time'
- * while keeping the '5 min' portion on the same line.
- *
- * If the formatted time/original time values (e.g. 5:11 pm) are provided, they
- * will be rendered above the status. Also, this can optionally be rendered with
- * a background color for a label-like presentation.
- */
 const RealtimeStatusLabel = ({
   className,
   delay,
@@ -79,24 +70,19 @@ const RealtimeStatusLabel = ({
   time?: number
   withBackground?: boolean
 }): JSX.Element => {
-  // @ts-ignore getTripStatus is not typed yet
+  // @ts-ignore getTripStatus not typed
   const status: typeof REALTIME_STATUS = getTripStatus(
     isRealtime,
     delay,
     onTimeThresholdSeconds
   )
   const isEarlyOrLate =
-    // @ts-ignore getTripStatus is not typed yet
+    // @ts-ignore getTripStatus not typed
     status === REALTIME_STATUS.EARLY || status === REALTIME_STATUS.LATE
-  // Use a default background color if the status object doesn't set a color
-  // (e.g. for 'Scheduled' status), but only in withBackground mode.
   // @ts-ignore getTripStatus is not typed yet
   const color = STATUS[status].color || (withBackground && '#6D6C6C')
-  // Render time if provided.
   let renderedTime
   if (time) {
-    // If transit vehicle is not on time, strike the original scheduled time
-    // and display the updated time underneath.
     renderedTime = isEarlyOrLate ? (
       <TimeBlock>
         <TimeStruck aria-hidden>
@@ -134,7 +120,7 @@ const RealtimeStatusLabel = ({
                 <>{null}</>
               )
             }
-            // @ts-ignore getTripStatus is not typed yet
+            // @ts-ignore getTripStatus not typed
             status={STATUS[status].label}
           />
         )}

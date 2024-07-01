@@ -51,23 +51,20 @@ interface State {
 
 const { getCurrentDate, getUserTimezone } = coreUtils.time
 
-/** The native date format used with <input type="date" /> elements */
 const inputDateFormat = 'yyyy-MM-dd'
 
 function getDefaultState(timeZone: string) {
   return {
-    // Compare dates/times in the stop viewer based on the agency's timezone.
     date: getCurrentDate(timeZone)
   }
 }
 
-// A scrollable container for the contents of the stop viewer body.
 const Scrollable = styled.div`
   margin-right: -12px;
   overflow-y: auto;
   padding-right: 12px;
 `
-// Alert with custom styles
+
 const StyledAlert = styled(Alert)`
   /* 'clear: both' prevents the date selector from overlapping with the alert. */
   clear: both;
@@ -129,8 +126,6 @@ class StopScheduleViewer extends Component<Props, State> {
   }
 
   componentDidUpdate() {
-    // FIXME: This is to prevent zooming the map back to entire itinerary
-    // when accessing the schedule viewer from the nearby view.
     this._zoomToStop()
   }
 
@@ -144,16 +139,11 @@ class StopScheduleViewer extends Component<Props, State> {
   getOperator = () => {
     const { stopData, transitOperators } = this.props
 
-    // We can use the first route, as this operator will only be used if there is only one operator
     return transitOperators.find(
       (o) => o.agencyId === stopData?.routes?.[0]?.agency.gtfsId
     )
   }
 
-  /**
-   * Gets a breadcrumbs-like title with format (operator stopcode/id | mode),
-   * so we don't need to internationalize the title bar structure.
-   */
   getTitle = () => {
     const { intl, stopData } = this.props
     const operator = this.getOperator()
@@ -171,13 +161,10 @@ class StopScheduleViewer extends Component<Props, State> {
 
   _isDateWithinRange = (date: string) => {
     const { calendarMax, calendarMin } = this.props
-    // Date comparison is string-based (lexicographic).
     return !isBlank(date) && date >= calendarMin && date <= calendarMax
   }
 
   handleDateChange = (evt: FormEvent<HTMLInputElement>) => {
-    // Check for non-empty date, and that date is within range before making request.
-    // (Users can enter a date outside of the range using the Up/Down arrow keys in Firefox and Safari.)
     const date = (evt.target as HTMLInputElement).value
     if (this._isDateWithinRange(date)) {
       this._findStopTimesForDate(date)
@@ -193,9 +180,7 @@ class StopScheduleViewer extends Component<Props, State> {
   _renderHeader = (agencyCount: number) => {
     const { hideBackButton, stopData, stopId } = this.props
     return (
-      // CSS class stop-viewer-header is needed for customizing how logos are displayed.
       <div className="stop-viewer-header">
-        {/* Back button */}
         {!hideBackButton && (
           <div className="back-button-container">
             <Button bsSize="small" onClick={this._backClicked}>
@@ -209,7 +194,6 @@ class StopScheduleViewer extends Component<Props, State> {
         <HeaderCard>
           {stopData?.name ? (
             <StopCardHeader
-              // FIXME: What icon should we use?
               actionIcon={MagnifyingGlass}
               actionParams={{ entityId: stopId }}
               actionPath={`/nearby/${stopData.lat},${stopData.lon}`}
@@ -236,9 +220,6 @@ class StopScheduleViewer extends Component<Props, State> {
     )
   }
 
-  /**
-   * Plan trip from/to here buttons, plus the schedule date control.
-   */
   _renderControls = () => {
     const { calendarMax, calendarMin, homeTimezone, intl, stopData } =
       this.props
@@ -247,8 +228,6 @@ class StopScheduleViewer extends Component<Props, State> {
 
     let warning
     if (inHomeTimezone && this._isDateWithinRange(date)) {
-      // Display a banner about the departure timezone if user's timezone is not the configured 'homeTimezone'
-      // (e.g. cases where a user in New York looks at a schedule in Los Angeles).
       warning = (
         <StyledAlert bsStyle="info">
           <TimezoneWarning
@@ -305,15 +284,7 @@ class StopScheduleViewer extends Component<Props, State> {
 
         {stopData && (
           <div className="stop-viewer-body">
-            {/* scrollable list of scheduled stops requires tabIndex 
-            for keyboard navigation */}
             <Scrollable tabIndex={0}>
-              {/* If geometries are available (and are not a point) and stop times 
-                are not, it is a strong indication that the stop is a flex stop.
-
-                The extra checks stopData are needed to ensure that the message is 
-                not shown while stopData is loading
-                */}
               {stopIsFlex(stopData) && (
                 <div style={{ lineHeight: 'normal' }}>
                   <FormattedMessage id="components.StopViewer.flexStop" />
@@ -336,7 +307,6 @@ class StopScheduleViewer extends Component<Props, State> {
 }
 
 // connect to redux store
-
 const mapStateToProps = (state: AppReduxState) => {
   const {
     config,
@@ -355,19 +325,12 @@ const mapStateToProps = (state: AppReduxState) => {
   const now = new Date()
   const thisYear = now.getFullYear()
   const { end, start } = serviceTimeRange
-  // If start is not provided, default to the first day of the current calendar year in the user's timezone.
-  // (No timezone conversion is needed in this case.)
-  // If start is provided in OTP, convert that date in the agency's home time zone.
   const calendarMin = format(
     start
       ? utcToZonedTime(start * 1000, homeTimezone)
       : new Date(thisYear, 0, 1),
     inputDateFormat
   )
-  // If end is not provided, default to the last day of the next calendar year in the user's timezone.
-  // (No timezone conversion is needed in this case.)
-  // If end date is provided and falls at midnight agency time,
-  // use the previous second to get the last service day available.
   const calendarMax = format(
     end
       ? utcToZonedTime((end - 1) * 1000, homeTimezone)

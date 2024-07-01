@@ -22,7 +22,6 @@ const ViewerContainer = ({
   mainPanelContent,
   style
 }: Props) => {
-  // check for main panel content
   switch (mainPanelContent) {
     case MainPanelContent.ROUTE_VIEWER:
       return <RouteViewer hideBackButton />
@@ -33,12 +32,10 @@ const ViewerContainer = ({
     case MainPanelContent.NEARBY_VIEW:
       return <NearbyView hideBackButton />
     default:
-      // check for stop viewer
       if (isViewingStop) {
         return <StopScheduleViewer hideBackButton />
       }
 
-      // otherwise, return default content
       return (
         <div className={className} style={style}>
           {children}
@@ -47,8 +44,7 @@ const ViewerContainer = ({
   }
 }
 
-// connect to the redux store
-
+// connect to redux store
 const mapStateToProps = (state: AppReduxState) => {
   const { mainPanelContent, viewedStop } = state.otp.ui
   return {

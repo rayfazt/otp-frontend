@@ -7,24 +7,15 @@ import React from 'react'
 import { IconWithText } from '../util/styledIcon'
 
 interface Props {
-  /**
-   * A reference date to determine the correct timezone code that accounts for daylight saving.
-   * Defaults to "today".
-   */
   date?: number | Date
   homeTimezone: string
 }
 
-/**
- * Display a banner about the departure timezone if user's timezone is not the configured 'homeTimezone'
- * (e.g. cases where a user in New York looks at a schedule in Los Angeles).
- */
 const TimezoneWarning = ({
   date = Date.now(),
   homeTimezone
 }: Props): JSX.Element => {
   const timezoneCode = format(date, 'z', {
-    // To avoid ambiguities for now, use the English-US timezone abbreviations ("EST", "PDT", etc.)
     locale: dateFnsUSLocale,
     timeZone: homeTimezone
   })

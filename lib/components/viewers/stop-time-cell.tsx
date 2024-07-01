@@ -30,17 +30,13 @@ const PulsingRss = styled(Rss)`
 `
 
 type Props = {
-  /** If configured, the timezone of the area */
   homeTimezone?: string
-  /** Optionally hide countdown unless realtime data is present */
   onlyShowCountdownForRealtime?: boolean
-  /** A stopTime object as received from a transit index API */
   stopTime: Time
 }
 
 /**
- * Renders a stop time as either schedule or countdown, with an optional status icon.
- * Stop time that apply to a different day have an additional text showing the day of departure.
+ * render stop time as schedule or countdown, with an optional status icon
  */
 // eslint-disable-next-line complexity
 const StopTimeCell = ({
@@ -69,18 +65,12 @@ const StopTimeCell = ({
     )
   }
 
-  // Determine whether to show departure as countdown (e.g. "5 min") or as HH:mm
-  // time, using realtime updates if available.
   const secondsUntilDeparture = Math.round(
     getSecondsUntilDeparture(stopTime, false)
   )
-  // Determine if vehicle arrives after midnight in order to advance the day of
-  // the week when showing arrival time/day.
   const departsInFuture = secondsUntilDeparture > 0
-  // Show the exact time if the departure happens within an hour.
   const showCountdown =
     secondsUntilDeparture < ONE_HOUR_IN_SECONDS && departsInFuture
-  // Whether to display "Due" or a countdown (used in conjunction with showCountdown).
   const isDue = secondsUntilDeparture < 60
 
   const formattedDay = utcToZonedTime(stopTime.serviceDay * 1000, homeTimezone)
@@ -114,11 +104,8 @@ const StopTimeCell = ({
           status: getTripStatus(realtime, stopTime.departureDelay, 30) as status
         })}
       >
-        {/* Not the cleanest boolean, but makes it very clear what we're doing
-        in all cases. */}
         {(onlyShowCountdownForRealtime === true && realtime) ||
         (onlyShowCountdownForRealtime === false && showCountdown) ? (
-          // Show countdown string (e.g., 3 min or Due)
           isDue ? (
             <FormattedMessage id="components.StopTimeCell.imminentArrival" />
           ) : (
@@ -132,8 +119,6 @@ const StopTimeCell = ({
             {!isSameDay(new Date(), formattedDay) && (
               <InvisibleA11yLabel>
                 <FormattedDayOfWeek
-                  // 'iiii' returns the long ISO day of the week (independent of browser locale).
-                  // See https://date-fns.org/v2.28.0/docs/format
                   day={format(formattedDay, 'iiii', {
                     timeZone: homeTimezone
                   }).toLowerCase()}

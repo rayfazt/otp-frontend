@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore TYPESCRIPT TODO: wait for typescripted core-utils
+// @ts-ignore typescript
 import coreUtils from '@opentripplanner/core-utils'
 import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
@@ -14,7 +14,6 @@ import Loading from '../narrative/loading'
 
 import DepartureTime from './departure-time'
 
-// Styles for the schedule table and its contents.
 const StyledTable = styled.table`
   box-sizing: border-box;
   height: 100%;
@@ -37,9 +36,6 @@ const StyledTable = styled.table`
   }
 `
 
-// Limit the width of the block cell if agency uses very long block IDs,
-// otherwise the table contents overflows the width of the side pane.
-// FIXME: Determine a good way to display long block ids.
 const BlockCell = styled.td`
   max-width: 100px;
   overflow-x: hidden;
@@ -54,24 +50,14 @@ const TimeCell = styled.td`
   white-space: nowrap;
 `
 
-/**
- * Table showing scheduled departure times for the specified stop organized
- * chronologically.
- */
 class StopScheduleTable extends Component<{
   date: string
   homeTimezone: string
   showBlockIds?: boolean
   stopData: StopData
 }> {
-  /**
-   * Link to the DOM for the next departure row, so we can scroll to it if needed.
-   */
   targetDepartureRef = createRef<HTMLTableRowElement>()
 
-  /**
-   * Scroll to the first stop time that is departing from now.
-   */
   _scrollToFirstDeparture = (): void => {
     const { current } = this.targetDepartureRef
     if (current) {
@@ -84,13 +70,11 @@ class StopScheduleTable extends Component<{
   }
 
   componentDidUpdate(): void {
-    // Should only happen if user changes date and a new stopData is passed.
     this._scrollToFirstDeparture()
   }
 
   render(): JSX.Element {
     const { date, homeTimezone, showBlockIds, stopData } = this.props
-    // Show loading spinner if times are still being fetched.
     if (stopData.fetchStatus === FETCH_STATUS.FETCHING) {
       return <Loading small />
     }
@@ -98,8 +82,6 @@ class StopScheduleTable extends Component<{
 
     const today = coreUtils.time.getCurrentDate(homeTimezone)
 
-    // Find the next stop time that is departing.
-    // We will scroll to that stop time entry (if showing schedules for today).
     const shouldHighlightFirstDeparture =
       mergedStopTimes.length && date === today
     const highlightedStopTime = shouldHighlightFirstDeparture
@@ -129,14 +111,8 @@ class StopScheduleTable extends Component<{
         <tbody>
           {mergedStopTimes.map((stopTime, index) => {
             const { blockId, headsign, route } = stopTime
-            // Highlight if this row is the imminent departure and schedule is shown for today.
             const highlightRow = stopTime === highlightedStopTime
             const className = highlightRow ? 'highlighted-item' : ''
-            // This is a bit of a hack to account for the sticky table
-            // header interfering with the scrollIntoView. If the next stop time
-            // is the imminent departure, we'll set the scrollTo to this row (the
-            // stop time prior), which effectively applies an offset for the
-            // scroll. If next row does not exist, default to this row.
             const nextStopTime = mergedStopTimes[index + 1]
             const scrollToRow = nextStopTime
               ? nextStopTime === highlightedStopTime
@@ -147,7 +123,6 @@ class StopScheduleTable extends Component<{
                 : route.longName
               : ''
 
-            // Add ref to scroll to the first stop time departing from now.
             const refProp = scrollToRow ? this.targetDepartureRef : undefined
 
             return (

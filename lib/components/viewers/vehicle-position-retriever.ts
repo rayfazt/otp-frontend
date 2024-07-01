@@ -9,9 +9,6 @@ interface Props {
   routeId?: string
 }
 
-/**
- * Non-visual component that retrieves vehicle positions for the given route.
- */
 const VehiclePositionRetriever = ({
   getVehiclePositionsForRoute,
   refreshSeconds,
@@ -26,12 +23,11 @@ const VehiclePositionRetriever = ({
   }, [routeId, getVehiclePositionsForRoute])
 
   useEffect(() => {
-    // Fetch vehicle positions when initially mounting component and a route id is available.
+    // fetch vehicle positions when initially mounting component and route id is available
     if (routeId) {
       refreshVehiclePositions()
 
       if (!refreshTimer) {
-        // Refresh vehicle positions per interval set in config.
         setRefreshTimer(
           setInterval(refreshVehiclePositions, refreshSeconds * 1000)
         )
@@ -39,7 +35,7 @@ const VehiclePositionRetriever = ({
     }
 
     return () => {
-      // Stop refreshing vehicle positions for the specified route when this component unmounts.
+      // stop refreshing vehicle positions component unmounts
       if (refreshTimer) {
         clearInterval(refreshTimer)
         setRefreshTimer(null)
@@ -47,7 +43,6 @@ const VehiclePositionRetriever = ({
     }
   }, [routeId, refreshVehiclePositions, refreshTimer, refreshSeconds])
 
-  // Component renders nothing.
   return null
 }
 

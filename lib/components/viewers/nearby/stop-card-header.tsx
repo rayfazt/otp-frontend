@@ -40,9 +40,6 @@ const Operator = ({ operator }: { operator?: TransitOperator }) => {
       }
     )
     return operator.logo ? (
-      // Span with agency classname allows optional contrast/customization in user
-      // config for logos with poor contrast. Class name is hyphenated agency name
-      // e.g. "sound-transit"
       <span
         className={
           operator.name ? operator.name.replace(/\s+/g, '-').toLowerCase() : ''
@@ -51,8 +48,6 @@ const Operator = ({ operator }: { operator?: TransitOperator }) => {
         <OperatorLogo alt={operatorLogoAriaLabel} operator={operator} />
       </span>
     ) : (
-      // If operator exists but logo is missing,
-      // we still need to announce the operator name to screen readers.
       <InvisibleA11yLabel>{operatorLogoAriaLabel}</InvisibleA11yLabel>
     )
   }
@@ -72,7 +67,7 @@ const StopCardHeader = ({
   const intl = useIntl()
   const agencies =
     stopData.stoptimesForPatterns?.reduce<Set<string>>((prev, cur) => {
-      // @ts-expect-error The agency type is not yet compatible with OTP2
+      // @ts-expect-error agency type not compatible
       const agencyGtfsId = cur.pattern.route.agency?.gtfsId
       return agencyGtfsId ? prev.add(agencyGtfsId) : prev
     }, new Set()) || new Set()
@@ -85,11 +80,10 @@ const StopCardHeader = ({
   return (
     <>
       <CardHeader>
-        {/* @ts-expect-error The 'as' prop in styled-components is not listed for TypeScript. */}
+        {/* @ts-expect-error 'as' prop */}
         <CardTitle as={titleAs}>
           {transitOperators
             ?.filter((to) => Array.from(agencies).includes(to.agencyId))
-            // Second pass to remove duplicates based on name
             .filter(
               (to, index, arr) =>
                 index === arr.findIndex((t) => t?.name === to?.name)

@@ -83,7 +83,6 @@ const Stop = ({
     <Card>
       <StopCardHeader
         actionIcon={Calendar}
-        // Remove entityId URL parameter when leaving nearby view.
         actionParams={{ entityId: undefined }}
         actionPath={`/schedule/${stopData.gtfsId}`}
         actionText={
@@ -105,14 +104,14 @@ const mapStateToProps = (state: AppReduxState) => {
   const nearbyViewConfig = config?.nearbyView
   const transitOperators = config?.transitOperators || []
 
-  // Default sort: departure time
+  // sort by departure time
   let routeSortComparator = (a: PatternStopTime, b: PatternStopTime) =>
     fullTimestamp(a.stoptimes?.[0]) - fullTimestamp(b.stoptimes?.[0])
 
   if (nearbyViewConfig?.useRouteViewSort) {
     routeSortComparator = (a: PatternStopTime, b: PatternStopTime) =>
       coreUtils.route.makeRouteComparator(transitOperators)(
-        // @ts-expect-error core-utils types are wrong!
+        // @ts-expect-error core-utils wrong types
         a.pattern.route,
         b.pattern.route
       )
