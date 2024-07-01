@@ -169,7 +169,7 @@ exports[`components > viewers > stop viewer should render with initial stop id a
               </Connect(PageTitle)>
               <Connect(ServiceTimeRangeRetriever)>
                 <ServiceTimeRangeRetriever
-                  retrieveServiceTimeRangeIfNeeded={[Function]}
+                  retrieveServiceTimeRange={[Function]}
                 />
               </Connect(ServiceTimeRangeRetriever)>
               <div

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import apiActionsV2 from '../../actions/apiV2'
 
 interface Props {
-  retrieveServiceTimeRangeIfNeeded: () => void
+  retrieveServiceTimeRange: () => void
 }
 
 /**
@@ -12,12 +12,12 @@ interface Props {
  * for OTP planning and schedule retrieval.
  */
 const ServiceTimeRangeRetriever = ({
-  retrieveServiceTimeRangeIfNeeded
+  retrieveServiceTimeRange
 }: Props): null => {
   // If not already done, retrieve the OTP available date range on mount.
   useEffect(() => {
-    retrieveServiceTimeRangeIfNeeded()
-  }, [retrieveServiceTimeRangeIfNeeded])
+    retrieveServiceTimeRange()
+  }, [retrieveServiceTimeRange])
 
   // Component renders nothing
   return null
@@ -25,8 +25,7 @@ const ServiceTimeRangeRetriever = ({
 
 // Connect to redux
 const mapDispatchToProps = {
-  retrieveServiceTimeRangeIfNeeded:
-    apiActionsV2.retrieveServiceTimeRangeIfNeeded
+  retrieveServiceTimeRange: apiActionsV2.retrieveServiceTimeRange
 }
 
 export default connect(null, mapDispatchToProps)(ServiceTimeRangeRetriever)
